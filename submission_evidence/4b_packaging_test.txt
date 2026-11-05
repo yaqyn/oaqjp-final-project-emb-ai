@@ -1,0 +1,23 @@
+==========================================================================
+Q7 / TASK 4 ACTIVITY 2 - packaging test
+Host working directory: /home/qv/final_project
+==========================================================================
+
+$ python3 -c "from EmotionDetection.emotion_detection import emotion_detector; print(emotion_detector('I am very angry'))"
+--- LIVE ATTEMPT against the real Watson endpoint ---
+  File "<string>", line 1, in <module>
+    from EmotionDetection.emotion_detection import emotion_detector; print(emotion_detector('I am very angry'))
+                                                                           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/qv/final_project/EmotionDetection/emotion_detection.py", line 70, in emotion_detector
+    raise RuntimeError(
+        "The emotion detection service could not be reached."
+    ) from exc
+RuntimeError: The emotion detection service could not be reached.
+
+--- WATSON ENDPOINT UNREACHABLE (connect timeout) ---
+
+Same command against the clearly-labelled local Watson-compatible STUB.
+These values are STUB output, NOT Watson output:
+
+$ WATSON_EMOTION_URL=http://127.0.0.1:9099/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict python3 -c "from EmotionDetection.emotion_detection import emotion_detector; print(emotion_detector('I am very angry'))"
+{'anger': 1.0, 'disgust': 0.0, 'fear': 0.0, 'joy': 0.0, 'sadness': 0.0, 'dominant_emotion': 'anger'}

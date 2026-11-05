@@ -1,0 +1,22 @@
+$ python3 -m unittest -v
+test_anger (test_emotion_detection.TestEmotionDetector.test_anger)
+Anger is dominant for an angry statement. ... ok
+test_blank_input (test_emotion_detection.TestEmotionDetector.test_blank_input)
+Blank input returns six ``None`` values without calling Watson. ... ok
+test_disgust (test_emotion_detection.TestEmotionDetector.test_disgust)
+Disgust is dominant for a disgusted statement. ... ok
+test_fear (test_emotion_detection.TestEmotionDetector.test_fear)
+Fear is dominant for a frightened statement. ... ok
+test_http_400 (test_emotion_detection.TestEmotionDetector.test_http_400)
+HTTP 400 from Watson returns six ``None`` values. ... ok
+test_joy (test_emotion_detection.TestEmotionDetector.test_joy)
+Joy is dominant for a happy statement. ... ok
+test_sadness (test_emotion_detection.TestEmotionDetector.test_sadness)
+Sadness is dominant for a sad statement. ... ok
+test_live_anger (test_emotion_detection.TestLiveWatsonService.test_live_anger)
+A real Watson call classifies an angry sentence as anger. ... skipped 'Live Watson NLP test disabled; set RUN_LIVE_TESTS=1 to enable (requires lab network access).'
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK (skipped=1)

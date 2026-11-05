@@ -1,0 +1,148 @@
+==========================================================================
+Q3 / TASK 2 ACTIVITY 2 - application creation terminal session
+Host working directory: /home/qv/final_project
+NOTE: /home/project does not exist on this host and cannot be created
+      (no write permission, sudo requires a password). /home/qv/final_project
+      is the real, verified working directory used for every command below.
+==========================================================================
+
+$ pwd
+/home/qv/final_project
+
+$ python3
+--- LIVE ATTEMPT against the real IBM Watson endpoint (see traceback) ---
+>>> from emotion_detection import emotion_detector
+>>> print(emotion_detector('I am really mad about this'))
+Traceback (most recent call last):
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connection.py", line 239, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connectionpool.py", line 494, in _make_request
+    raise new_e
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connectionpool.py", line 470, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connectionpool.py", line 1125, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connection.py", line 827, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connection.py", line 248, in _new_conn
+    raise ConnectTimeoutError(
+    ...<2 lines>...
+    ) from e
+urllib3.exceptions.ConnectTimeoutError: (<HTTPSConnection(host='sn-watson-emotion.labs.skills.network', port=443) at 0x7fc8ea647e00>, 'Connection to sn-watson-emotion.labs.skills.network timed out. (connect timeout=10)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/requests/adapters.py", line 696, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/urllib3/util/retry.py", line 555, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='sn-watson-emotion.labs.skills.network', port=443): Max retries exceeded with url: /v1/watson.runtime.nlp.v1/NlpService/EmotionPredict (Caused by ConnectTimeoutError(<HTTPSConnection(host='sn-watson-emotion.labs.skills.network', port=443) at 0x7fc8ea647e00>, 'Connection to sn-watson-emotion.labs.skills.network timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/qv/final_project/EmotionDetection/emotion_detection.py", line 63, in emotion_detector
+    response = requests.post(
+        EMOTION_ENDPOINT,
+    ...<2 lines>...
+        timeout=REQUEST_TIMEOUT,
+    )
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/requests/api.py", line 134, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/requests/api.py", line 71, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/requests/sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/requests/sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/qv/final_project/.venv/lib/python3.15/site-packages/requests/adapters.py", line 717, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='sn-watson-emotion.labs.skills.network', port=443): Max retries exceeded with url: /v1/watson.runtime.nlp.v1/NlpService/EmotionPredict (Caused by ConnectTimeoutError(<HTTPSConnection(host='sn-watson-emotion.labs.skills.network', port=443) at 0x7fc8ea647e00>, 'Connection to sn-watson-emotion.labs.skills.network timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    print(emotion_detector('I am really mad about this'))
+          ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/qv/final_project/EmotionDetection/emotion_detection.py", line 70, in emotion_detector
+    raise RuntimeError(
+        "The emotion detection service could not be reached."
+    ) from exc
+RuntimeError: The emotion detection service could not be reached.
+>>> exit()
+
+==========================================================================
+The IBM Skills Network lab endpoint is not routable from this machine:
+sn-watson-emotion.labs.skills.network resolves to private 10.x addresses
+and every connection attempt times out. The live call above therefore
+ended in RuntimeError, not in emotion scores. No Watson scores are
+invented here.
+
+The SAME interactive session, pointed at the clearly-labelled local
+Watson-compatible STUB (tools/watson_stub.py) via WATSON_EMOTION_URL.
+These scores are STUB output, NOT Watson output:
+==========================================================================
+
+$ WATSON_EMOTION_URL=http://127.0.0.1:9099/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict python3
+>>> from emotion_detection import emotion_detector
+>>> print(emotion_detector('I am really mad about this'))
+{'anger': 1.0, 'disgust': 0.0, 'fear': 0.0, 'joy': 0.0, 'sadness': 0.0, 'dominant_emotion': 'anger'}
+>>> exit()
+
+$ python3 test_emotion_detection.py
+test_anger (__main__.TestEmotionDetector.test_anger)
+Anger is dominant for an angry statement. ... ok
+test_blank_input (__main__.TestEmotionDetector.test_blank_input)
+Blank input returns six ``None`` values without calling Watson. ... ok
+test_disgust (__main__.TestEmotionDetector.test_disgust)
+Disgust is dominant for a disgusted statement. ... ok
+test_fear (__main__.TestEmotionDetector.test_fear)
+Fear is dominant for a frightened statement. ... ok
+test_http_400 (__main__.TestEmotionDetector.test_http_400)
+HTTP 400 from Watson returns six ``None`` values. ... ok
+test_joy (__main__.TestEmotionDetector.test_joy)
+Joy is dominant for a happy statement. ... ok
+test_sadness (__main__.TestEmotionDetector.test_sadness)
+Sadness is dominant for a sad statement. ... ok
+test_live_anger (__main__.TestLiveWatsonService.test_live_anger)
+A real Watson call classifies an angry sentence as anger. ... skipped 'Live Watson NLP test disabled; set RUN_LIVE_TESTS=1 to enable (requires lab network access).'
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK (skipped=1)

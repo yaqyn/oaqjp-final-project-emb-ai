@@ -1,0 +1,3 @@
+$ curl -s -w "\\nHTTP=%{http_code}\\n" -G --data-urlencode "textToAnalyze=I am very happy today" http://127.0.0.1:5001/emotionDetector
+The emotion detection service is temporarily unavailable. Please try again later.
+HTTP=503
