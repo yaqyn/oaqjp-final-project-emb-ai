@@ -1,8 +1,8 @@
 """Flask web application for the Emotion Detector final project."""
 
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request
 
-from EmotionDetection.emotion_detection import emotion_detector
+from EmotionDetection.emotion_detection import MAX_TEXT_LENGTH, MODEL_ID, emotion_detector
 
 app = Flask(__name__)
 
@@ -18,6 +18,16 @@ TEXT_TOO_LONG_MESSAGE = "Text is too long. Please use 5,000 characters or fewer.
 def render_index_page():
     """Render the course-provided Emotion Detection web page."""
     return render_template("index.html")
+
+
+@app.route("/health")
+def health_check():
+    """Report local application readiness without calling Watson."""
+    return jsonify(
+        status="ok",
+        model_id=MODEL_ID,
+        max_text_length=MAX_TEXT_LENGTH,
+    )
 
 
 @app.route("/emotionDetector")

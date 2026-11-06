@@ -137,6 +137,22 @@ class TestEmotionDetector(unittest.TestCase):
         self.assertEqual(response.status_code, 413)
         self.assertIn("5,000 characters or fewer", response.get_data(as_text=True))
 
+    def test_health_endpoint_reports_local_readiness_without_watson(self):
+        """Health probes remain deterministic and avoid remote service calls."""
+        with patch("EmotionDetection.emotion_detection.requests.post") as mocked_post:
+            with app.test_client() as client:
+                response = client.get("/health")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.get_json(),
+            {
+                "max_text_length": 5000,
+                "model_id": "emotion_aggregated-workflow_lang_en_stock",
+                "status": "ok",
+            },
+        )
+        mocked_post.assert_not_called()
+
 
 @unittest.skipUnless(
     os.environ.get("RUN_LIVE_TESTS") == "1",
