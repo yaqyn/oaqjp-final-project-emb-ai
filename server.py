@@ -11,6 +11,7 @@ SERVICE_ERROR_MESSAGE = (
     "The emotion detection service is temporarily unavailable. "
     "Please try again later."
 )
+TEXT_TOO_LONG_MESSAGE = "Text is too long. Please use 5,000 characters or fewer."
 
 
 @app.route("/")
@@ -29,6 +30,8 @@ def run_emotion_detector():
 
     try:
         result = emotion_detector(text_to_analyze)
+    except ValueError:
+        return TEXT_TOO_LONG_MESSAGE, 413
     except RuntimeError:
         return SERVICE_ERROR_MESSAGE, 503
 

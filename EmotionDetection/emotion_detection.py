@@ -20,6 +20,7 @@ EMOTION_ENDPOINT = os.environ.get("WATSON_EMOTION_URL", DEFAULT_ENDPOINT)
 
 MODEL_ID = "emotion_aggregated-workflow_lang_en_stock"
 REQUEST_TIMEOUT = 10
+MAX_TEXT_LENGTH = 5000
 EMOTION_KEYS = ("anger", "disgust", "fear", "joy", "sadness")
 
 
@@ -56,6 +57,8 @@ def emotion_detector(text_to_analyze):
     """
     if text_to_analyze is None or not str(text_to_analyze).strip():
         return _empty_result()
+    if len(str(text_to_analyze)) > MAX_TEXT_LENGTH:
+        raise ValueError(f"Text must contain at most {MAX_TEXT_LENGTH} characters.")
 
     payload = {"raw_document": {"text": str(text_to_analyze)}}
 

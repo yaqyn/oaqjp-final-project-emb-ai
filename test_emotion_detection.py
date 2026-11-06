@@ -10,6 +10,7 @@ import unittest
 from unittest.mock import patch
 
 from EmotionDetection.emotion_detection import emotion_detector
+from server import app
 
 MOCKED_EMOTIONS = {
     "anger": 0.02,
@@ -121,6 +122,20 @@ class TestEmotionDetector(unittest.TestCase):
                 "dominant_emotion": None,
             },
         )
+
+    def test_oversized_input_is_rejected_before_watson(self):
+        """Bound requests before they are sent to the remote service."""
+        with patch("EmotionDetection.emotion_detection.requests.post") as mocked_post:
+            with self.assertRaisesRegex(ValueError, "at most 5000"):
+                emotion_detector("x" * 5001)
+        mocked_post.assert_not_called()
+
+    def test_web_endpoint_reports_oversized_input(self):
+        """The HTTP route returns a specific payload-too-large response."""
+        with app.test_client() as client:
+            response = client.get("/emotionDetector", query_string={"textToAnalyze": "x" * 5001})
+        self.assertEqual(response.status_code, 413)
+        self.assertIn("5,000 characters or fewer", response.get_data(as_text=True))
 
 
 @unittest.skipUnless(
