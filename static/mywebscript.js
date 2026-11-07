@@ -12,6 +12,7 @@ let RunSentimentAnalysis = ()=>{
             }
         }
     };
-    xhttp.open("GET", "emotionDetector?textToAnalyze=" + encodeURIComponent(textToAnalyze), true);
-    xhttp.send();
+    xhttp.open("POST", "emotionDetector", true);
+    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+    xhttp.send("textToAnalyze=" + encodeURIComponent(textToAnalyze));
 }

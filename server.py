@@ -30,10 +30,11 @@ def health_check():
     )
 
 
-@app.route("/emotionDetector")
+@app.route("/emotionDetector", methods=["GET", "POST"])
 def run_emotion_detector():
-    """Analyse the ``textToAnalyze`` query parameter and format the response."""
-    text_to_analyze = request.args.get("textToAnalyze", "")
+    """Analyse submitted text while retaining the course's legacy GET route."""
+    source = request.form if request.method == "POST" else request.args
+    text_to_analyze = source.get("textToAnalyze", "")
 
     if not text_to_analyze.strip():
         return INVALID_TEXT_MESSAGE

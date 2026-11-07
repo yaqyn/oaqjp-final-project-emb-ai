@@ -8,6 +8,7 @@ call to the IBM Watson NLP endpoint and only runs when ``RUN_LIVE_TESTS=1``.
 import math
 import os
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from EmotionDetection.emotion_detection import emotion_detector
@@ -151,6 +152,27 @@ class TestEmotionDetector(unittest.TestCase):
             response = client.get("/emotionDetector", query_string={"textToAnalyze": "x" * 5001})
         self.assertEqual(response.status_code, 413)
         self.assertIn("5,000 characters or fewer", response.get_data(as_text=True))
+
+    def test_web_endpoint_accepts_text_in_post_body(self):
+        """Browser submissions keep analyzed text out of the request URL."""
+        with patch(
+            "server.emotion_detector",
+            return_value={**MOCKED_EMOTIONS, "dominant_emotion": "joy"},
+        ) as detector:
+            with app.test_client() as client:
+                response = client.post(
+                    "/emotionDetector",
+                    data={"textToAnalyze": "A private journal sentence"},
+                )
+        self.assertEqual(response.status_code, 200)
+        detector.assert_called_once_with("A private journal sentence")
+        self.assertIn("dominant emotion is joy", response.get_data(as_text=True))
+
+    def test_browser_script_posts_text_without_a_query_parameter(self):
+        """The shipped browser client sends analysis text in the request body."""
+        script = Path("static/mywebscript.js").read_text(encoding="utf-8")
+        self.assertIn('xhttp.open("POST", "emotionDetector"', script)
+        self.assertNotIn("emotionDetector?textToAnalyze", script)
 
     def test_health_endpoint_reports_local_readiness_without_watson(self):
         """Health probes remain deterministic and avoid remote service calls."""
