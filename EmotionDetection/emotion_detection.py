@@ -5,7 +5,9 @@ Watson NLP ``EmotionPredict`` endpoint and returns the five emotion scores plus
 the dominant emotion.
 """
 
+import math
 import os
+from numbers import Real
 
 import requests
 
@@ -84,7 +86,17 @@ def emotion_detector(text_to_analyze):
 
     try:
         scores = response.json()["emotionPredictions"][0]["emotion"]
-        result = {emotion: scores[emotion] for emotion in EMOTION_KEYS}
+        result = {}
+        for emotion in EMOTION_KEYS:
+            score = scores[emotion]
+            if (
+                isinstance(score, bool)
+                or not isinstance(score, Real)
+                or not math.isfinite(score)
+                or not 0 <= score <= 1
+            ):
+                raise ValueError(f"Invalid score for {emotion}.")
+            result[emotion] = float(score)
     except (KeyError, IndexError, TypeError, ValueError) as exc:
         raise RuntimeError(
             "The emotion detection service returned an unexpected response."

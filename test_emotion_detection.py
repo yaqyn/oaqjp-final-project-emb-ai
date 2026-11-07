@@ -5,6 +5,7 @@ formatting logic without network access. The optional live test performs a real
 call to the IBM Watson NLP endpoint and only runs when ``RUN_LIVE_TESTS=1``.
 """
 
+import math
 import os
 import unittest
 from unittest.mock import patch
@@ -122,6 +123,20 @@ class TestEmotionDetector(unittest.TestCase):
                 "dominant_emotion": None,
             },
         )
+
+    def test_invalid_watson_scores_are_rejected(self):
+        """Malformed or non-probability scores cannot become a result."""
+        for invalid in ("0.9", True, -0.1, 1.1, math.nan, math.inf):
+            with self.subTest(score=invalid), patch(
+                "EmotionDetection.emotion_detection.requests.post",
+                return_value=MockResponse(
+                    200, watson_payload({"joy": invalid})
+                ),
+            ):
+                with self.assertRaisesRegex(
+                    RuntimeError, "unexpected response"
+                ):
+                    emotion_detector("A test statement")
 
     def test_oversized_input_is_rejected_before_watson(self):
         """Bound requests before they are sent to the remote service."""
